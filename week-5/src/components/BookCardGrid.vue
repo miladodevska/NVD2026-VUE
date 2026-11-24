@@ -1,0 +1,60 @@
+<script setup>
+import { inject } from 'vue'
+import { coverUrl } from '@/utils/cover'
+
+defineProps({
+  book: {
+    type: Object,
+    required: true,
+    validator: (book) => ['want', 'reading', 'read'].includes(book.status),
+  },
+})
+
+const STATUSES = { want: 'To read', reading: 'Reading', read: 'Read' }
+const { setStatus, removeBook } = inject('shelf')
+</script>
+
+<template>
+  <BaseCard :class="{ read: book.status === 'read' }">
+    <template #header>
+      <img v-if="book.coverId" class="cover" :src="coverUrl(book.coverId)" alt="" />
+      <strong class="title">{{ book.title }}</strong>
+      <span v-if="book.year" class="muted"> ({{ book.year }})</span>
+    </template>
+
+    <p class="muted">by {{ book.author }}</p>
+
+    <template #actions>
+      <select :value="book.status" @change="setStatus(book.id, $event.target.value)">
+        <option v-for="(label, value) in STATUSES" :key="value" :value="value">
+          {{ label }}
+        </option>
+      </select>
+      <BaseButton @click="removeBook(book.id)">Remove</BaseButton>
+    </template>
+  </BaseCard>
+</template>
+
+<style scoped>
+p {
+  margin: 0;
+}
+
+select {
+  flex: 1;
+  min-width: 0;
+}
+
+.cover {
+  display: block;
+  width: 100%;
+  height: 180px;
+  object-fit: contain;
+  margin-bottom: 0.5rem;
+}
+
+.read .title {
+  text-decoration: line-through;
+  color: var(--muted);
+}
+</style>

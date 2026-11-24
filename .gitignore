@@ -1,0 +1,18 @@
+# dependencies and builds (students run npm install themselves)
+node_modules/
+dist/
+
+# local environment files (the .env.example files are kept)
+.env
+.env.*
+!.env.example
+*.local
+
+# OS and Office temporary files
+.DS_Store
+Thumbs.db
+desktop.ini
+~$*
+
+# old copies saved by Claude (current decks live in Presentations/)
+Claude outputs/
